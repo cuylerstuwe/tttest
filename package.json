@@ -9,16 +9,13 @@
   "repository": "https://github.com/electron/electron-quick-start",
   "author": "saqfish",
   "license": "mit",
-  "devDependencies": {
-    "electron": "^4.0.3"
-  },
   "dependencies": {
+    "electron": "^4.0.3",
     "electron-localshortcut": "^3.1.0",
     "jquery": "^3.3.1",
-    "jquery.terminal": "^2.2.0",
     "lowdb": "^1.0.0",
     "play-sound": "^1.1.3",
-    "semantic-ui": "^2.4.2",
-    "sendbird": "^3.0.96",
+    "query-string": "^6.2.0",
+    "sendbird": "^3.0.96"
   }
 }

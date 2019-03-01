@@ -350,7 +350,7 @@ const windows = {
 			height: 600,
 			useContentSize:true,
 			frame: false,
-			show: false,
+			show: true,
 			webPreferences: {
 				nodeIntegration: false,
 				preload: path.join(__dirname, 'src/injects/redditLogin.js')
