@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			cArea.error(comand);
 		}
 
-	}, { prompt: color("b","red",">") , echoCommand: false, greetings: 'Welcome to chat. Behave.',
+	}, { prompt: color("b","red","> ") , echoCommand: false, greetings: 'Welcome to chat. Behave.',
 		onCommandNotFound:function(cmd,term){
 			term.echo(`<${color("b","green","You")}> ${color("","white",cmd)}`);
 		chatBox = term;
