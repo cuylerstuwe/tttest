@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<script>
+                        var $ = jQuery = require("jquery")
+                </script>
+                <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+                <link rel="stylesheet" type="text/css" href="../../semantic/dist/semantic.min.css">
+                <script src="../../semantic/dist/semantic.min.js"></script>
+
+                <title>Scrape List</title>
+
+		<style>
+		body { 
+			background: #141414; 
+			overflow: hidden;
+			font-size: 18px;
+		}
+		.topmenu {
+			margin-bottom: 0px !important;
+		}
+		.result {
+			scrollbar-color: light;
+			height:100%;
+			overflow-y:scroll;
+			padding: 5px;
+		}
+		.drag {
+			-webkit-user-select: none;
+			-webkit-app-region: drag;
+		}
+
+		.nodrag {
+			-webkit-app-region: no-drag;
+		}
+		.spid {
+			text-overflow: ellipsis;
+			overflow: hidden;
+			white-space: nowrap;
+			max-width:99%
+		}
+		</style>
+
+
+	</head>
+	<body>
+		<div class="ui inverted mini menu topmenu drag">
+			<a class="item ">Scrape List</a>
+			<a id="scrapeVals" class="item "></a>
+			<div class="right menu nodrag">
+				<a id="scrapeClose" class="item"><i  class="delete icon"></i></a>
+			</div>
+		</div>
+		<div id="resultDiv" class="ui attached result"></div>
+		<div id="scrapeSettingsModal"class="ui modal">
+			<div id="hitHeader" class="header">Header</div>
+			<div id="hitContent" class="content">
+			</div>
+			<div class="actions">
+				<div class="ui green button">Accept</div>
+				<div class="ui red button">Block</div>
+				<div class="ui green button">Include</div>
+				<div class="ui blue button">To chat</div>
+			</div>
+		</div>
+		<script>
+			require('../renderers/scrapeRenderer.js')
+		</script> 
+
+	</body>
+</html>

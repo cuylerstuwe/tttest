@@ -1,0 +1,28 @@
+{
+  "scraper": {
+    "searchTerm": "bloody",
+    "reward": "0.01",
+    "qualified": true,
+    "masters": false,
+    "includes": true,
+    "blocks": false,
+    "hotkeys": {
+      "settings": "F1",
+      "close": "Escape",
+      "scrape": "Ctrl+1",
+      "watch": "Ctrl+2",
+      "scrapeList": "F2",
+      "watchList": "F3"
+    }
+  },
+  "main": {
+    "hotkeys": {
+      "settings": "F1",
+      "close": "Escape",
+      "scrape": "Ctrl+1",
+      "watch": "Ctrl+2",
+      "scrapeList": "F2",
+      "watchList": "F3"
+    }
+  }
+}
