@@ -273,7 +273,7 @@ const windows = {
 			});
 
 			currentWindow = realMainWindow;
-			realMainWindow.webContents.openDevTools()
+			//realMainWindow.webContents.openDevTools()
 			realMainWindow.loadFile('src/views/index.html');
 			realMainWindow.on('closed', function () {
 				realMainWindow = null
