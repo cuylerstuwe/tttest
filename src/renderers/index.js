@@ -3,6 +3,7 @@ const $ = jQuery = require('jquery');
 const {remote,ipcRenderer} = require('electron');
 const nsb = require('sendbird');
 var path = require('path');
+var farmhash = require('farmhash');
 
 
 var chatBox = null;
@@ -120,7 +121,7 @@ ipcRenderer.on('chat', (event, ...args) => {
 	}
 });
 
-ch.onMessageReceived = function(channel, message) {
+ch.onMessageReceived = async function(channel, message) {
 
 	var participantListQuery = channel.createMemberListQuery();
 
@@ -138,7 +139,11 @@ ch.onMessageReceived = function(channel, message) {
 	}catch(e){
 		console.log("PARSE ERROR");
 	}
-	cArea.echo(`<${color("b","blue",gsender)}> ${color("","white",message.message)}`);
+
+	const usernameHash = farmhash.hash32(gsender);
+	const usernameHashHex = usernameHash.toString(16);
+
+	cArea.echo(`<${color("b",`#${usernameHashHex.substr(0, 6)}`,gsender)}> ${color("","white",message.message)}`);
 };
 
 sb.addChannelHandler(groupHandlerID, ch);
