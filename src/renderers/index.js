@@ -9,6 +9,8 @@ var chatBox = null;
 var cArea;
 var terminal;
 var gc;
+var users = [];
+var musr="";
 
 function color(style,color,message) {
 	return `[[${style};${color};black]` + message + "]";
@@ -46,18 +48,38 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			cArea.error(comand);
 		}
 
-	}, { prompt: color("b","red","> ") , echoCommand: false, greetings: 'Welcome to chat. Behave.',
+	},{
+		//Bootleg autocomplete users
+		keydown: function(e) {
+			let term = cArea.terminal();
+			let word = term.before_cursor(true);
+			let ting = "";
+			if (e.which == 9) {
+				if(word.substring(0,1) == "@"){
+					ting = users.filter(a=>{
+						return a.indexOf(word.substring(1,word.length)) !== -1;
+					});
+					if(ting != ""){
+						term.insert(ting[0].substring(word.length-1,ting[0].length));
+						musr=ting[0];
+					}
+
+				}
+			}
+		},
+		prompt: color("b","red","> ") , echoCommand: false, greetings: 'F6 to connect',
 		onCommandNotFound:function(cmd,term){
 			term.echo(`<${color("b","green","You")}> ${color("","white",cmd)}`);
-		chatBox = term;
-		sendMessageG(gc,cmd);
-		$('.chatArea')[0].scrollIntoView(false);
-	},exceptionHandler:function(exception){
-		console.log(exception.message);
+			chatBox = term;
+			sendMessageG(gc,cmd,musr);
+			$('.chatArea')[0].scrollIntoView(false);
+		},exceptionHandler:function(exception){
+			console.log(exception.message);
 		if(exception.message.includes("sendUserMessage") && exception.message.includes("undefined")){
 			chatBox.error("You aren't connected");
 		}
-	}
+	},completion: ['blah','donkey']
+
 });
 
 });
@@ -76,13 +98,11 @@ var ch = new sb.ChannelHandler();
 
 
 ipcRenderer.on('scrape', (event, ...args) => {
-	//console.log(args);
 	switch(args[0]){
 		case 'scraping':
 			if(args[1]){
 				//Scraping start
 				$('#statusScraperLabel').addClass('green');
-				console.log(cArea);
 				cArea.terminal().set_prompt(color("b","green","Scraping>"));
 			}else{
 				//Scraping stop
@@ -106,8 +126,45 @@ ipcRenderer.on('chat', (event, ...args) => {
 						if (error) {
 							return;
 						}
-						cArea.echo("Connected");
+						//cArea.echo("Connected");
+						cArea.clear();
 						gc = groupChannel;
+						gc.members.forEach(i=>{
+							users.push(i.nickname);
+						});
+
+						var participantListQuery = gc.createMemberListQuery();
+
+						participantListQuery.next(function (participantList, error) {
+							if (error) {
+								return;
+							}
+							participantList.forEach(i=>{
+								users.push(i.nickname);
+							});
+						});
+						//cArea.terminal({completion: ['blah','donkey']});
+						
+
+						
+						var prevMessageListQuery = groupChannel.createPreviousMessageListQuery();
+						prevMessageListQuery.limit = 20;
+						prevMessageListQuery.reverse = false;
+
+						prevMessageListQuery.load(function(messages, error) {
+							if (error) {
+								return;
+							}
+							messages.forEach(a=>{
+								let message = color("b","grey",a.message);	
+								let sender = color("b","white",a._sender.nickname);
+								let info = `+<${sender}> ${message}`;
+								cArea.echo(info);
+
+							});
+						});
+						gc.refresh();
+
 					});
 
 				}
@@ -121,18 +178,6 @@ ipcRenderer.on('chat', (event, ...args) => {
 });
 
 ch.onMessageReceived = function(channel, message) {
-
-	var participantListQuery = channel.createMemberListQuery();
-
-	participantListQuery.next(function (participantList, error) {
-		if (error) {
-			return;
-		}
-
-		for(i in participantList){
-			//TODO: Add accessible channel participants somewhere.
-		}
-	});
 	try{
 		gsender = message._sender.nickname.toString();
 	}catch(e){
@@ -143,12 +188,20 @@ ch.onMessageReceived = function(channel, message) {
 
 sb.addChannelHandler(groupHandlerID, ch);
 
-//Send message to group
-function sendMessageG(groupChannel, message) {
-	groupChannel.sendUserMessage(message, null, null, function(message, error) {
+//Send message with mention
+function sendMessageG(gc,m,usr){
+	var params = new sb.UserMessageParams();
+	params.message = m;
+	if(usr != ""){
+		params.mentionedUserIds = [usr];
+		console.log("Mentioning "+usr);
+	}
+
+	gc.sendUserMessage(params, function(message, error) {
 		if (error) {
 			return;
 		}
 	});
+	usr="";
 }
 
