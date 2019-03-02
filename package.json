@@ -4,6 +4,7 @@
   "description": "TurkerTools",
   "main": "main.js",
   "scripts": {
+    "rebuild": "./node_modules/.bin/electron-rebuild",
     "start": "electron ."
   },
   "repository": "https://github.com/electron/electron-quick-start",
@@ -12,6 +13,8 @@
   "dependencies": {
     "electron": "^4.0.3",
     "electron-localshortcut": "^3.1.0",
+    "electron-rebuild": "^1.8.4",
+    "farmhash": "^2.1.0",
     "jquery": "^3.3.1",
     "lowdb": "^1.0.0",
     "play-sound": "^1.1.3",
